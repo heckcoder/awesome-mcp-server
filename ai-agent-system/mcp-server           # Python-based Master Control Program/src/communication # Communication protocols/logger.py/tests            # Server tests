@@ -1,0 +1,19 @@
+# File: /ai-agent-system/ai-agent-system/mcp-server/src/communication/protocol.py
+
+import json
+
+def serialize_message(message):
+    return json.dumps(message)
+
+def deserialize_message(message_str):
+    return json.loads(message_str)
+
+def create_message(message_type, payload):
+    return {
+        "type": message_type,
+        "payload": payload
+    }
+
+def parse_message(message):
+    message_dict = deserialize_message(message)
+    return message_dict.get("type"), message_dict.get("payload")

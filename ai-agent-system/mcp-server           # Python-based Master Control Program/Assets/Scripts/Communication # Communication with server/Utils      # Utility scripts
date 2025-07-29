@@ -1,0 +1,40 @@
+# File: /ai-agent-system/ai-agent-system/mcp-server/src/core/server.py
+
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+import asyncio
+import json
+from communication.protocol import serialize_message, deserialize_message
+from agents.base_agent import BaseAgent
+
+app = FastAPI()
+connections = {}
+agents = {}
+
+@app.websocket("/ws/{session_id}")
+async def websocket_endpoint(websocket: WebSocket, session_id: str):
+    await websocket.accept()
+    connections[session_id] = websocket
+    agents[session_id] = BaseAgent()  # Initialize an agent for the session
+
+    try:
+        while True:
+            data = await websocket.receive_text()
+            message = deserialize_message(data)
+            await process_message(session_id, message)
+    except WebSocketDisconnect:
+        del connections[session_id]
+        del agents[session_id]
+
+async def process_message(session_id: str, message: dict):
+    # Process the incoming message and interact with the agent
+    agent = agents[session_id]
+    response = agent.process_command(message)
+    await send_response(session_id, response)
+
+async def send_response(session_id: str, response: dict):
+    if session_id in connections:
+        await connections[session_id].send_text(serialize_message(response))
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

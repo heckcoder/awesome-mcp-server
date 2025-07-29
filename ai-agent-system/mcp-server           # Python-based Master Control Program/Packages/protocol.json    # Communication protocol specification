@@ -1,0 +1,41 @@
+{
+  "protocol": {
+    "version": "1.0",
+    "messages": {
+      "request": {
+        "type": "object",
+        "properties": {
+          "session_id": {
+            "type": "string"
+          },
+          "command": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": ["session_id", "command"]
+      },
+      "response": {
+        "type": "object",
+        "properties": {
+          "session_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["success", "error"]
+          },
+          "data": {
+            "type": "object"
+          },
+          "error_message": {
+            "type": "string"
+          }
+        },
+        "required": ["session_id", "status"]
+      }
+    }
+  }
+}

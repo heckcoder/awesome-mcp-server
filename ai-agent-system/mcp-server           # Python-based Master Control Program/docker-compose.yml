@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  mcp-server:
+    build: ./src/core         # Core server functionality
+    ports:
+      - "8000:8000"
+    environment:
+      - API_TOKEN=mcp-local-user
+      - PROJECT_ROOT=/app
+    volumes:
+      - ./src:/app/src
+    command: python src/core/server.py

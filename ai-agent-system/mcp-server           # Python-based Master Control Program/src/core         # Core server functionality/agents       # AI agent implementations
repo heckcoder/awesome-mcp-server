@@ -1,0 +1,32 @@
+# File: /ai-agent-system/ai-agent-system/mcp-server/src/core/server.py
+
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+import asyncio
+import json
+
+app = FastAPI()
+
+# Store active connections
+connections = {}
+
+@app.websocket("/ws/{session_id}")
+async def websocket_endpoint(websocket: WebSocket, session_id: str):
+    await websocket.accept()
+    connections[session_id] = websocket
+    try:
+        while True:
+            data = await websocket.receive_text()
+            await process_message(session_id, data)
+    except WebSocketDisconnect:
+        del connections[session_id]
+
+async def process_message(session_id: str, message: str):
+    # Process the incoming message and send a response
+    data = json.loads(message)
+    # Here you would handle the message and send commands back to Unity
+    response = {"status": "received", "session_id": session_id}
+    await connections[session_id].send_text(json.dumps(response))
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -1,0 +1,40 @@
+{
+  "message_types": {
+    "commands": {
+      "start": {
+        "description": "Start the AI agent.",
+        "parameters": {
+          "agent_id": "string"
+        }
+      },
+      "stop": {
+        "description": "Stop the AI agent.",
+        "parameters": {
+          "agent_id": "string"
+        }
+      },
+      "update": {
+        "description": "Update the AI agent's state.",
+        "parameters": {
+          "agent_id": "string",
+          "state": "object"
+        }
+      }
+    },
+    "responses": {
+      "success": {
+        "description": "Indicates a successful operation.",
+        "parameters": {
+          "message": "string"
+        }
+      },
+      "error": {
+        "description": "Indicates an error occurred.",
+        "parameters": {
+          "code": "integer",
+          "message": "string"
+        }
+      }
+    }
+  }
+}

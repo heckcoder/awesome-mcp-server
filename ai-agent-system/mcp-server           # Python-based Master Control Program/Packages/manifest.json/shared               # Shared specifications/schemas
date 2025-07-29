@@ -1,0 +1,14 @@
+{
+  "name": "MCP Server",
+  "version": "1.0.0",
+  "description": "Master Control Program for managing AI agents in Unity.",
+  "dependencies": {
+    "fastapi": "^0.68.0",
+    "python-dotenv": "^0.19.0",
+    "websockets": "^10.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "uvicorn src.core.server:app --host 0.0.0.0 --port 8000 --reload"
+  }
+}
